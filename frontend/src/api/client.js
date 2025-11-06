@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const api = axios.create({
-  baseURL: "http://localhost:3000/api",
+  baseURL: "https://slotswapper-assignment.onrender.com/api",
 });
 
 // Attach token from localStorage if present

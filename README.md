@@ -67,6 +67,6 @@ A React-based frontend application for the SlotSwapper time slot management and 
 
 ## Backend Integration
 
-The frontend communicates with the backend API at `http://localhost:3000/api` and integrates with all the required endpoints for authentication, event management, and swap functionality.
+The frontend communicates with the backend API at `https://slotswapper-assignment.onrender.com/api` and integrates with all the required endpoints for authentication, event management, and swap functionality.
 
-Make sure your backend server is running on `http://localhost:3000` before starting the frontend application.
+Make sure your backend server is running on `https://slotswapper-assignment.onrender.com` before starting the frontend application.
