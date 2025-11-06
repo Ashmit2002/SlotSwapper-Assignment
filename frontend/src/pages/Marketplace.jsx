@@ -55,7 +55,7 @@ const Marketplace = () => {
 
       alert("Swap request sent successfully!");
       handleCloseModal();
-      fetchData(); // Refresh data
+      fetchData();
     } catch (error) {
       console.error("Error sending swap request:", error);
       alert(
@@ -90,7 +90,7 @@ const Marketplace = () => {
       <Navbar />
 
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        {/* Header */}
+        {}
         <div className="mb-8">
           <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
             Marketplace
@@ -100,7 +100,7 @@ const Marketplace = () => {
           </p>
         </div>
 
-        {/* Available Slots */}
+        {}
         <div className="bg-white shadow overflow-hidden sm:rounded-md">
           <div className="px-4 py-5 sm:px-6 border-b border-gray-200">
             <h3 className="text-lg leading-6 font-medium text-gray-900">
@@ -176,7 +176,7 @@ const Marketplace = () => {
           )}
         </div>
 
-        {/* Request Swap Modal */}
+        {}
         {showRequestModal && (
           <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
             <div className="relative top-20 mx-auto p-5 border w-full max-w-md shadow-lg rounded-md bg-white">

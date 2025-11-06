@@ -80,7 +80,7 @@ export const AuthProvider = ({ children }) => {
     try {
       await api.get("/auth/logout");
     } catch {
-      // ignore logout errors
+     
     }
     localStorage.removeItem("token");
     setUser(null);

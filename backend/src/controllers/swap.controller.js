@@ -2,8 +2,7 @@ const eventModel = require("../models/event.model");
 const swapRequestModel = require("../models/swapRequest.model");
 const userModel = require("../models/user.model");
 const mongoose = require("mongoose");
-
-// Get all events for the current user
+
 const getUserEvents = async (req, res) => {
   try {
     const events = await eventModel
@@ -22,8 +21,7 @@ const getUserEvents = async (req, res) => {
     });
   }
 };
-
-// Create a new event
+
 const createEvent = async (req, res) => {
   try {
     const { title, startTime, endTime, status, description } = req.body;
@@ -52,14 +50,13 @@ const createEvent = async (req, res) => {
     });
   }
 };
-
-// Update an event
+
 const updateEvent = async (req, res) => {
   try {
     const { eventId } = req.params;
     const updates = req.body;
 
-    // Ensure user can only update their own events
+   
     const event = await eventModel.findOne({
       _id: eventId,
       userId: req.user._id,
@@ -71,7 +68,7 @@ const updateEvent = async (req, res) => {
       });
     }
 
-    // Prevent updating events that are in SWAP_PENDING status
+   
     if (event.status === "SWAP_PENDING") {
       return res.status(400).json({
         success: false,
@@ -79,7 +76,7 @@ const updateEvent = async (req, res) => {
       });
     }
 
-    // Update date fields if provided
+   
     if (updates.startTime) updates.startTime = new Date(updates.startTime);
     if (updates.endTime) updates.endTime = new Date(updates.endTime);
 
@@ -101,13 +98,12 @@ const updateEvent = async (req, res) => {
     });
   }
 };
-
-// Delete an event
+
 const deleteEvent = async (req, res) => {
   try {
     const { eventId } = req.params;
 
-    // Ensure user can only delete their own events
+   
     const event = await eventModel.findOne({
       _id: eventId,
       userId: req.user._id,
@@ -119,7 +115,7 @@ const deleteEvent = async (req, res) => {
       });
     }
 
-    // Prevent deleting events that are in SWAP_PENDING status
+   
     if (event.status === "SWAP_PENDING") {
       return res.status(400).json({
         success: false,
@@ -141,14 +137,13 @@ const deleteEvent = async (req, res) => {
     });
   }
 };
-
-// Get all swappable slots from other users
+
 const getSwappableSlots = async (req, res) => {
   try {
     const swappableSlots = await eventModel
       .find({
         status: "SWAPPABLE",
-        userId: { $ne: req.user._id }, // Exclude current user's slots
+        userId: { $ne: req.user._id },
       })
       .populate("userId", "username fullName email")
       .sort({ startTime: 1 });
@@ -165,8 +160,7 @@ const getSwappableSlots = async (req, res) => {
     });
   }
 };
-
-// Create a swap request
+
 const createSwapRequest = async (req, res) => {
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -181,7 +175,7 @@ const createSwapRequest = async (req, res) => {
       });
     }
 
-    // Verify my slot exists and belongs to the current user
+   
     const mySlot = await eventModel
       .findOne({
         _id: mySlotId,
@@ -198,12 +192,12 @@ const createSwapRequest = async (req, res) => {
       });
     }
 
-    // Verify their slot exists and is swappable
+   
     const theirSlot = await eventModel
       .findOne({
         _id: theirSlotId,
         status: "SWAPPABLE",
-        userId: { $ne: req.user._id }, // Ensure it's not the current user's slot
+        userId: { $ne: req.user._id },
       })
       .session(session);
 
@@ -215,7 +209,7 @@ const createSwapRequest = async (req, res) => {
       });
     }
 
-    // Check if there's already a pending request for these slots
+   
     const existingRequest = await swapRequestModel
       .findOne({
         $or: [
@@ -241,7 +235,7 @@ const createSwapRequest = async (req, res) => {
       });
     }
 
-    // Create the swap request
+   
     const swapRequest = new swapRequestModel({
       requesterId: req.user._id,
       receiverId: theirSlot.userId,
@@ -252,7 +246,7 @@ const createSwapRequest = async (req, res) => {
 
     await swapRequest.save({ session });
 
-    // Update both slots to SWAP_PENDING
+   
     await eventModel.findByIdAndUpdate(
       mySlotId,
       { status: "SWAP_PENDING" },
@@ -267,7 +261,7 @@ const createSwapRequest = async (req, res) => {
 
     await session.commitTransaction();
 
-    // Populate the swap request with user and event details
+   
     const populatedRequest = await swapRequestModel
       .findById(swapRequest._id)
       .populate("requesterId", "username fullName email")
@@ -291,15 +285,14 @@ const createSwapRequest = async (req, res) => {
     session.endSession();
   }
 };
-
-// Respond to a swap request (accept or reject)
+
 const respondToSwapRequest = async (req, res) => {
   const session = await mongoose.startSession();
   session.startTransaction();
 
   try {
     const { requestId } = req.params;
-    const { accept } = req.body; // true for accept, false for reject
+    const { accept } = req.body;
 
     if (typeof accept !== "boolean") {
       return res.status(400).json({
@@ -308,11 +301,11 @@ const respondToSwapRequest = async (req, res) => {
       });
     }
 
-    // Find the swap request
+   
     const swapRequest = await swapRequestModel
       .findOne({
         _id: requestId,
-        receiverId: req.user._id, // Only the receiver can respond
+        receiverId: req.user._id,
         status: "PENDING",
       })
       .session(session);
@@ -326,7 +319,7 @@ const respondToSwapRequest = async (req, res) => {
       });
     }
 
-    // Get both slots
+   
     const requesterSlot = await eventModel
       .findById(swapRequest.requesterSlotId)
       .session(session);
@@ -343,7 +336,7 @@ const respondToSwapRequest = async (req, res) => {
     }
 
     if (accept) {
-      // Accept the swap - exchange ownership
+     
       await eventModel.findByIdAndUpdate(
         swapRequest.requesterSlotId,
         {
@@ -362,7 +355,7 @@ const respondToSwapRequest = async (req, res) => {
         { session }
       );
 
-      // Update swap request status
+     
       await swapRequestModel.findByIdAndUpdate(
         requestId,
         { status: "ACCEPTED" },
@@ -377,7 +370,7 @@ const respondToSwapRequest = async (req, res) => {
           "Swap request accepted successfully. Events have been exchanged.",
       });
     } else {
-      // Reject the swap - restore slots to SWAPPABLE
+     
       await eventModel.findByIdAndUpdate(
         swapRequest.requesterSlotId,
         { status: "SWAPPABLE" },
@@ -390,7 +383,7 @@ const respondToSwapRequest = async (req, res) => {
         { session }
       );
 
-      // Update swap request status
+     
       await swapRequestModel.findByIdAndUpdate(
         requestId,
         { status: "REJECTED" },
@@ -416,11 +409,10 @@ const respondToSwapRequest = async (req, res) => {
     session.endSession();
   }
 };
-
-// Get swap requests for the current user (both sent and received)
+
 const getSwapRequests = async (req, res) => {
   try {
-    const { type } = req.query; // 'sent', 'received', or 'all'
+    const { type } = req.query;
 
     let query = {};
     if (type === "sent") {
@@ -428,7 +420,7 @@ const getSwapRequests = async (req, res) => {
     } else if (type === "received") {
       query.receiverId = req.user._id;
     } else {
-      // Default to all requests involving the user
+     
       query = {
         $or: [{ requesterId: req.user._id }, { receiverId: req.user._id }],
       };

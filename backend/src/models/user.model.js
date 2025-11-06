@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      select : false,  // Do not return password field by default
+      select : false, 
     },
     fullName: {
       firstName: { type: String, required: true },

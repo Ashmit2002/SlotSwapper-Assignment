@@ -30,7 +30,7 @@ const Dashboard = () => {
       const events = eventsResponse.data?.data || [];
       const swapRequests = swapRequestsResponse.data?.data || [];
 
-      // Calculate stats
+     
       const totalEvents = events.length;
       const swappableEvents = events.filter(
         (event) => event.status === "SWAPPABLE"
@@ -49,7 +49,7 @@ const Dashboard = () => {
         completedSwaps,
       });
 
-      // Set recent activity (recent events and swap requests)
+     
       const recentEvents = events
         .slice()
         .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
@@ -133,7 +133,7 @@ const Dashboard = () => {
       <Navbar />
 
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        {/* Header */}
+        {}
         <div className="md:flex md:items-center md:justify-between">
           <div className="flex-1 min-w-0">
             <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
@@ -154,7 +154,7 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Stats Cards */}
+        {}
         <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {statCards.map((card) => (
             <div
@@ -184,7 +184,7 @@ const Dashboard = () => {
           ))}
         </div>
 
-        {/* Recent Activity */}
+        {}
         <div className="mt-8">
           <div className="bg-white shadow overflow-hidden sm:rounded-md">
             <div className="px-4 py-5 sm:px-6">
@@ -241,7 +241,7 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Quick Actions */}
+        {}
         <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
           <div className="bg-white overflow-hidden shadow rounded-lg">
             <div className="p-5">

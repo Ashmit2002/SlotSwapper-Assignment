@@ -3,7 +3,7 @@ const userModel = require("../models/user.model");
 
 const authMiddleware = async (req, res, next) => {
   try {
-    // Check for token in Authorization header
+   
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -13,15 +13,15 @@ const authMiddleware = async (req, res, next) => {
       });
     }
 
-    const token = authHeader.substring(7); // Remove 'Bearer ' prefix
+    const token = authHeader.substring(7);
 
-    // Verify token
+   
     const decoded = jwt.verify(
       token,
       process.env.JWT_SECRET || "your-secret-key"
     );
 
-    // Find user (using 'id' field from the JWT payload)
+   
     const user = await userModel.findById(decoded.id);
     if (!user) {
       return res.status(401).json({
@@ -30,7 +30,7 @@ const authMiddleware = async (req, res, next) => {
       });
     }
 
-    // Attach user to request object
+   
     req.user = user;
     next();
   } catch (error) {

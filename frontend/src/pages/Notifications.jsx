@@ -26,7 +26,7 @@ const Notifications = () => {
     try {
       const response = await api.get("/swap-requests");
       const all = response.data?.data || [];
-      // Derive current user id from token
+     
       const token = localStorage.getItem("token");
       const currentUserId = token
         ? JSON.parse(atob(token.split(".")[1])).id
@@ -108,7 +108,7 @@ const Notifications = () => {
       <Navbar />
 
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        {/* Header */}
+        {}
         <div className="mb-8">
           <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
             Swap Requests
@@ -119,7 +119,7 @@ const Notifications = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Incoming Requests */}
+          {}
           <div className="bg-white shadow overflow-hidden sm:rounded-md">
             <div className="px-4 py-5 sm:px-6 border-b border-gray-200">
               <div className="flex items-center">
@@ -232,7 +232,7 @@ const Notifications = () => {
             )}
           </div>
 
-          {/* Outgoing Requests */}
+          {}
           <div className="bg-white shadow overflow-hidden sm:rounded-md">
             <div className="px-4 py-5 sm:px-6 border-b border-gray-200">
               <div className="flex items-center">

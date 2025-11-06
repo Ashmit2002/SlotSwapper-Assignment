@@ -32,7 +32,7 @@ const CalendarPage = () => {
   const fetchEvents = async () => {
     try {
       const response = await api.get("/events");
-      // backend returns { success, data: events }
+     
       setEvents(response.data?.data || []);
     } catch (error) {
       console.error("Error fetching events:", error);
@@ -135,7 +135,7 @@ const CalendarPage = () => {
       <Navbar />
 
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        {/* Header */}
+        {}
         <div className="md:flex md:items-center md:justify-between mb-8">
           <div className="flex-1 min-w-0">
             <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
@@ -156,7 +156,7 @@ const CalendarPage = () => {
           </div>
         </div>
 
-        {/* Events List */}
+        {}
         <div className="bg-white shadow overflow-hidden sm:rounded-md">
           {events.length > 0 ? (
             <ul className="divide-y divide-gray-200">
@@ -265,7 +265,7 @@ const CalendarPage = () => {
           )}
         </div>
 
-        {/* Create/Edit Event Modal */}
+        {}
         {showCreateModal && (
           <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
             <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
