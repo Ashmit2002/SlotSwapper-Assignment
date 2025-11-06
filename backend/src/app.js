@@ -28,16 +28,19 @@ app.use("/api", swapRoutes);
 const staticDir = path.join(__dirname, "../../frontend/dist");
 app.use(express.static(staticDir));
 
-// SPA fallback for non-API routes
-app.get("*", (req, res) => {
-  // Do not interfere with API or static asset files
+// SPA fallback for non-API GET routes (Express 5-safe)
+app.use((req, res, next) => {
+  // Only handle GET navigations that accept HTML
+  if (req.method !== "GET") return next();
+  if (req.path.startsWith("/api")) return next();
+
   const acceptHTML =
     req.headers.accept && req.headers.accept.includes("text/html");
-  const isAsset = req.path.includes(".");
-  if (req.path.startsWith("/api") || isAsset || !acceptHTML) {
-    return res.status(404).end();
-  }
-  res.sendFile(path.join(staticDir, "index.html"));
+  const isAsset = req.path.includes("."); // e.g., /assets/app.js, /favicon.ico
+
+  if (!acceptHTML || isAsset) return next();
+
+  return res.sendFile(path.join(staticDir, "index.html"));
 });
 
 module.exports = app;
